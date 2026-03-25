@@ -1,0 +1,49 @@
+---
+title: "Macular Degeneration"
+author: "Cooper Riggs, Adam Bitner, & Stockton Nelson"
+format: pdf
+editor: visual
+---
+
+## Setup
+
+```{r}
+#Downloading Libraries
+library(tidyverse)
+
+#Bringing in Data
+eyes <- vroom::vroom("ARMD.txt") |>
+  janitor::clean_names() 
+```
+
+## Problem 1 (Stockton)
+
+### EDA
+
+```{r}
+
+```
+
+## Problem 2 (Cooper)
+
+### Modeling
+
+```{r}
+
+```
+
+## Problem 3 (Adam)
+
+### Inference
+
+```{r}
+
+```
+
+## Problem 4 (Adam)
+
+### Prediction
+
+```{r}
+
+```
