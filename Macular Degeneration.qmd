@@ -13,7 +13,9 @@ library(tidyverse)
 
 #Bringing in Data
 eyes <- vroom::vroom("ARMD.txt") |>
-  janitor::clean_names() 
+  janitor::clean_names() |>
+  mutate(treatment = as.factor(trt)) |>
+  select(-trt)
 ```
 
 ## Problem 1 (Stockton)
@@ -21,7 +23,53 @@ eyes <- vroom::vroom("ARMD.txt") |>
 ### EDA
 
 ```{r}
+#Making a Violin Plot
+ggplot(eyes, aes(x = vision, y = as.factor(time), fill = treatment, color = treatment)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) +
+  scale_fill_manual(values = c("0" = "#032C3C",   
+                                 "1" = "#BA351A"),
+               labels = c("Placebo", expression(paste("Interferon ", alpha)))) +
+  scale_color_manual(
+    values = c("0" = "#8B9092", "1" = "black")  # Outline and quantiles by treatment
+  ) +
+  labs(x = "Vision Score",
+       y = "Week",
+       fill = "Treatment") +
+  theme(
+    panel.background = element_rect(fill = "#F5F5F5"),
+    plot.background = element_rect(fill = "#EAEAEA"),
+    panel.grid.major = element_line(color = "white"),
+    legend.background = element_rect(fill = "#EAEAEA", color = "black"),
+    legend.position = "none"
+  )
 
+#Saving the Violin Plot
+# ggsave("Violin_Plot.png", width = 10, height = 6, dpi = 300)
+```
+
+```{r}
+#Creating Time Series Plot
+ggplot(data = eyes, aes(x = time, y = vision, color = treatment)) +
+  stat_summary(fun = mean, geom = "line") +
+  stat_summary(fun = mean, geom = "point") +
+  scale_color_manual(values = c("0" = "#032C3C",   
+                                 "1" = "#BA351A"),
+               labels = c("Placebo", expression(paste("Interferon ", alpha)))) +
+  labs(x = "Week",
+       y = "Vision Score",
+       color = "Treatment") + #,
+       #title = "Time Series of Vision Scores",
+       #subtitle = "Comparing Vision Scores between Treatment Types") +
+  theme(
+    panel.background = element_rect(fill = "#F5F5F5"),
+    plot.background = element_rect(fill = "#EAEAEA"),
+    panel.grid.major = element_line(color = "white"),
+    legend.background = element_rect(fill = "#EAEAEA", color = "black"),
+    legend.position = "none"
+  )
+
+#Saving the Time Series
+# ggsave("Time_Series.png", width = 10, height = 6, dpi = 300)
 ```
 
 ## Problem 2 (Cooper)
