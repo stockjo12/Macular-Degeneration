@@ -107,7 +107,14 @@ coef(my_model)
 ### Inference
 
 ```{r}
+library(multcomp)
 
+glht_test <- glht(my_model, linfct = c("time:treatment1 = 0"))
+summary(glht_test)
+```
+
+```{r}
+confint(glht_test)
 ```
 
 ## Problem 4 (Cooper)
@@ -115,5 +122,10 @@ coef(my_model)
 ### Prediction
 
 ```{r}
-
+new_data <- data.frame(
+  time = 52,
+  treatment = factor(c(0,1)),
+  baseline = mean(eyes$baseline)
+)
+predict(my_model, newdata = new_data)
 ```
