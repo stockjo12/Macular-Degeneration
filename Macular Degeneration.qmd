@@ -80,7 +80,7 @@ ggplot(data = eyes, aes(x = time, y = vision, color = treatment)) +
 library(nlme)
 library(tidyr)
 # linear model and seeing correlation
-mod <- lm(vision ~ time + treatment, data = eyes)
+mod <- lm(vision ~ time + treatment + baseline + time:baseline + time:treatment + treatment:baseline, data = eyes)
 
 eyes$resid <- residuals(mod)
 resid_wide <- eyes %>%
@@ -96,7 +96,7 @@ cor(resid_matrix, use = "complete.obs")
 
 ```{r}
 # gls model
-my_model <- gls(vision ~ time + treatment, data=eyes, correlation=corSymm(form=~4|subject))
+my_model <- gls(vision ~ time + treatment + baseline + time:baseline + time:treatment + treatment:baseline, data=eyes, correlation=corSymm(form=~4|subject))
 my_model$modelStruct$corStruct
 sigma(my_model)
 coef(my_model)
