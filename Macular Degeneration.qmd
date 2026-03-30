@@ -72,15 +72,37 @@ ggplot(data = eyes, aes(x = time, y = vision, color = treatment)) +
 # ggsave("Time_Series.png", width = 10, height = 6, dpi = 300)
 ```
 
-## Problem 2 (Cooper)
+## Problem 2 (Adam)
 
 ### Modeling
 
 ```{r}
+library(nlme)
+library(tidyr)
+# linear model and seeing correlation
+mod <- lm(vision ~ time + treatment, data = eyes)
 
+eyes$resid <- residuals(mod)
+resid_wide <- eyes %>%
+  select(subject, time, resid) %>%
+  pivot_wider(
+    names_from = time,
+    values_from = resid
+  )
+
+resid_matrix <- as.matrix(resid_wide[,-1])
+cor(resid_matrix, use = "complete.obs")
 ```
 
-## Problem 3 (Adam)
+```{r}
+# gls model
+my_model <- gls(vision ~ time + treatment, data=eyes, correlation=corSymm(form=~4|subject))
+my_model$modelStruct$corStruct
+sigma(my_model)
+coef(my_model)
+```
+
+## Problem 3 (Cooper)
 
 ### Inference
 
@@ -88,7 +110,7 @@ ggplot(data = eyes, aes(x = time, y = vision, color = treatment)) +
 
 ```
 
-## Problem 4 (Adam)
+## Problem 4 (Cooper)
 
 ### Prediction
 
