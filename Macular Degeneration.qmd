@@ -117,6 +117,23 @@ summary(glht_test)
 confint(glht_test)
 ```
 
+```{r}
+coefs <- coef(my_model)
+baseline_mean <- mean(eyes$baseline)
+
+# Placebo slope (treatment = 0)
+placebo_slope <- coefs["time"] + 
+                 coefs["time:baseline"] * baseline_mean
+
+# Treatment slope (treatment = 1)
+treatment_slope <- coefs["time"] + 
+                   coefs["time:baseline"] * baseline_mean +
+                   coefs["time:treatment1"]
+
+placebo_slope
+treatment_slope
+```
+
 ## Problem 4 (Cooper)
 
 ### Prediction
